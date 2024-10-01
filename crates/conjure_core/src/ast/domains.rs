@@ -1,7 +1,24 @@
 use serde::{Deserialize, Serialize};
+use std::ops::Deref;
 // use std::iter::Ste
 
-type ConstantInt = i32;
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct ConstantInt(i32);
+
+impl ConstantInt {
+    pub fn new(value: i32) -> Self {
+        ConstantInt(value)
+    }
+}
+
+// Implementing Deref to allow access to i32's inherent methods
+impl Deref for ConstantInt {
+    type Target = i32;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Range<A>
@@ -64,45 +81,68 @@ mod tests {
 
     #[test]
     fn test_negative_product() {
-        let d1 = Domain::IntDomain(vec![Range::Bounded(-2, 1)]);
-        let d2 = Domain::IntDomain(vec![Range::Bounded(-2, 1)]);
+        let d1 = Domain::IntDomain(vec![Range::Bounded(
+            ConstantInt::new(-2),
+            ConstantInt::new(1),
+        )]);
+        let d2 = Domain::IntDomain(vec![Range::Bounded(
+            ConstantInt::new(-2),
+            ConstantInt::new(1),
+        )]);
         let res = d1.apply_i32(|a, b| Some(a * b), &d2).unwrap();
 
         if let Domain::IntDomain(ranges) = res {
-            assert!(!ranges.contains(&Range::Single(-4)));
-            assert!(!ranges.contains(&Range::Single(-3)));
-            assert!(ranges.contains(&Range::Single(-2)));
-            assert!(ranges.contains(&Range::Single(-1)));
-            assert!(ranges.contains(&Range::Single(0)));
-            assert!(ranges.contains(&Range::Single(1)));
-            assert!(ranges.contains(&Range::Single(2)));
-            assert!(!ranges.contains(&Range::Single(3)));
-            assert!(ranges.contains(&Range::Single(4)));
+            // Updated to use ConstantInt instances instead of raw integers.
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(-4))));
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(-3))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(-2))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(-1))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(0))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(1))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(2))));
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(3))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(4))));
         } else {
-            panic!();
+            panic!("Expected IntDomain");
         }
     }
 
     #[test]
     fn test_negative_div() {
-        let d1 = Domain::IntDomain(vec![Range::Bounded(-2, 1)]);
-        let d2 = Domain::IntDomain(vec![Range::Bounded(-2, 1)]);
+        let d1 = Domain::IntDomain(vec![Range::Bounded(
+            ConstantInt::new(-2),
+            ConstantInt::new(1),
+        )]);
+        let d2 = Domain::IntDomain(vec![Range::Bounded(
+            ConstantInt::new(-2),
+            ConstantInt::new(1),
+        )]);
         let res = d1
-            .apply_i32(|a, b| if b != 0 { Some(a / b) } else { None }, &d2)
+            .apply_i32(
+                |a, b| {
+                    if b != ConstantInt::new(0) {
+                        Some(a / b)
+                    } else {
+                        None
+                    }
+                },
+                &d2,
+            )
             .unwrap();
 
         if let Domain::IntDomain(ranges) = res {
-            assert!(!ranges.contains(&Range::Single(-4)));
-            assert!(!ranges.contains(&Range::Single(-3)));
-            assert!(ranges.contains(&Range::Single(-2)));
-            assert!(ranges.contains(&Range::Single(-1)));
-            assert!(ranges.contains(&Range::Single(0)));
-            assert!(ranges.contains(&Range::Single(1)));
-            assert!(ranges.contains(&Range::Single(2)));
-            assert!(!ranges.contains(&Range::Single(3)));
-            assert!(!ranges.contains(&Range::Single(4)));
+            // Updated to use ConstantInt instances instead of raw integers.
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(-4))));
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(-3))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(-2))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(-1))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(0))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(1))));
+            assert!(ranges.contains(&Range::Single(ConstantInt::new(2))));
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(3))));
+            assert!(!ranges.contains(&Range::Single(ConstantInt::new(4))));
         } else {
-            panic!();
+            panic!("Expected IntDomain");
         }
     }
 }
