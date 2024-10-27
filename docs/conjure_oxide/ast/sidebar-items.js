@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Constant","Domain","Expression","Name","Range","ReturnType"],"mod":["types"],"struct":["DecisionVariable"],"type":["SymbolTable"]};
