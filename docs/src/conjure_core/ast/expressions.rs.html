@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/ast/expressions.rs`."><title>expressions.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-590a400c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0-nightly (854980293 2024-11-06)" data-channel="nightly" data-search-js="search-c5a66128.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/ast/</div>expressions.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/ast/expressions.rs`."><title>expressions.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-590a400c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0-nightly (143ce0920 2024-11-10)" data-channel="nightly" data-search-js="search-c5a66128.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/ast/</div>expressions.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -473,7 +473,15 @@
 <a href="#472" id="472">472</a>
 <a href="#473" id="473">473</a>
 <a href="#474" id="474">474</a>
-<a href="#475" id="475">475</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::{Display, Formatter};
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::{Display, Formatter};
 <span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>serde::{Deserialize, Serialize};
@@ -482,8 +490,9 @@
 <span class="kw">use </span>uniplate::derive::Uniplate;
 <span class="kw">use </span>uniplate::Biplate;
 
-<span class="kw">use </span><span class="kw">crate</span>::ast::constants::Constant;
+<span class="kw">use </span><span class="kw">crate</span>::ast::literals::Literal;
 <span class="kw">use </span><span class="kw">crate</span>::ast::symbol_table::{Name, SymbolTable};
+<span class="kw">use </span><span class="kw">crate</span>::ast::Factor;
 <span class="kw">use </span><span class="kw">crate</span>::ast::ReturnType;
 <span class="kw">use </span><span class="kw">crate</span>::metadata::Metadata;
 
@@ -495,25 +504,17 @@
 /// used to build rules and conditions for the model.
 </span><span class="attr">#[document_compatibility]
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Uniplate)]
-#[uniplate(walk_into=[]</span>)]
-<span class="attr">#[biplate(to=Constant)]
+#[uniplate(walk_into=[Factor]</span>)]
+<span class="attr">#[biplate(to=Literal)]
 #[biplate(to=Metadata)]
+#[biplate(to=Factor)]
+#[biplate(to=Name)]
 </span><span class="kw">pub enum </span>Expression {
-    <span class="doccomment">/**
-     * Represents an empty expression
-     * NB: we only expect this at the top level of a model (if there is no constraints)
-     */
-    </span>Nothing,
-
     <span class="doccomment">/// An expression representing "A is valid as long as B is true"
     /// Turns into a conjunction when it reaches a boolean context
     </span>Bubble(Metadata, Box&lt;Expression&gt;, Box&lt;Expression&gt;),
 
-    <span class="attr">#[compatible(Minion, JsonInput)]
-    </span>Constant(Metadata, Constant),
-
-    <span class="attr">#[compatible(Minion, JsonInput, SAT)]
-    </span>Reference(Metadata, Name),
+    FactorE(Metadata, Factor),
 
     <span class="attr">#[compatible(Minion, JsonInput)]
     </span>Sum(Metadata, Vec&lt;Expression&gt;),
@@ -599,7 +600,7 @@
     ///
     ///
     </span><span class="attr">#[compatible(Minion)]
-    </span>WatchedLiteral(Metadata, Name, Constant),
+    </span>WatchedLiteral(Metadata, Name, Literal),
 
     <span class="attr">#[compatible(Minion)]
     </span>Reify(Metadata, Box&lt;Expression&gt;, Box&lt;Expression&gt;),
@@ -631,7 +632,9 @@
                 }
             }
             Range::Bounded(i, j) =&gt; {
-                <span class="kw">if </span><span class="kw-2">*</span>i &lt; min {}
+                <span class="kw">if </span><span class="kw-2">*</span>i &lt; min {
+                    min = <span class="kw-2">*</span>i;
+                }
                 <span class="kw">if </span><span class="kw-2">*</span>j &gt; max {
                     max = <span class="kw-2">*</span>j;
                 }
@@ -645,11 +648,11 @@
     <span class="doccomment">/// Returns the possible values of the expression, recursing to leaf expressions
     </span><span class="kw">pub fn </span>domain_of(<span class="kw-2">&amp;</span><span class="self">self</span>, vars: <span class="kw-2">&amp;</span>SymbolTable) -&gt; <span class="prelude-ty">Option</span>&lt;Domain&gt; {
         <span class="kw">let </span>ret = <span class="kw">match </span><span class="self">self </span>{
-            Expression::Reference(<span class="kw">_</span>, name) =&gt; <span class="prelude-val">Some</span>(vars.get(name)<span class="question-mark">?</span>.domain.clone()),
-            Expression::Constant(<span class="kw">_</span>, Constant::Int(n)) =&gt; {
+            Expression::FactorE(<span class="kw">_</span>, Factor::Reference(name)) =&gt; <span class="prelude-val">Some</span>(vars.get(name)<span class="question-mark">?</span>.domain.clone()),
+            Expression::FactorE(<span class="kw">_</span>, Factor::Literal(Literal::Int(n))) =&gt; {
                 <span class="prelude-val">Some</span>(Domain::IntDomain(<span class="macro">vec!</span>[Range::Single(<span class="kw-2">*</span>n)]))
             }
-            Expression::Constant(<span class="kw">_</span>, Constant::Bool(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Some</span>(Domain::BoolDomain),
+            Expression::FactorE(<span class="kw">_</span>, Factor::Literal(Literal::Bool(<span class="kw">_</span>))) =&gt; <span class="prelude-val">Some</span>(Domain::BoolDomain),
             Expression::Sum(<span class="kw">_</span>, exprs) =&gt; expr_vec_to_domain_i32(exprs, |x, y| <span class="prelude-val">Some</span>(x + y), vars),
             Expression::Min(<span class="kw">_</span>, exprs) =&gt; {
                 expr_vec_to_domain_i32(exprs, |x, y| <span class="prelude-val">Some</span>(<span class="kw">if </span>x &lt; y { x } <span class="kw">else </span>{ y }), vars)
@@ -678,28 +681,26 @@
     }
 
     <span class="kw">pub fn </span>get_meta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Metadata {
-        <span class="kw">return </span>&lt;Expression <span class="kw">as </span>Biplate&lt;Metadata&gt;&gt;::children_bi(<span class="kw-2">&amp;</span><span class="self">self</span>)[<span class="number">0</span>].clone();
+        &lt;Expression <span class="kw">as </span>Biplate&lt;Metadata&gt;&gt;::children_bi(<span class="self">self</span>)[<span class="number">0</span>].clone()
     }
 
     <span class="kw">pub fn </span>set_meta(<span class="kw-2">&amp;</span><span class="self">self</span>, meta: Metadata) {
-        &lt;Expression <span class="kw">as </span>Biplate&lt;Metadata&gt;&gt;::transform_bi(<span class="kw-2">&amp;</span><span class="self">self</span>, Arc::new(<span class="kw">move </span>|<span class="kw">_</span>| meta.clone()));
+        &lt;Expression <span class="kw">as </span>Biplate&lt;Metadata&gt;&gt;::transform_bi(<span class="self">self</span>, Arc::new(<span class="kw">move </span>|<span class="kw">_</span>| meta.clone()));
     }
 
     <span class="kw">pub fn </span>can_be_undefined(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="comment">// TODO: there will be more false cases but we are being conservative
         </span><span class="kw">match </span><span class="self">self </span>{
-            Expression::Reference(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-            Expression::Constant(<span class="kw">_</span>, Constant::Bool(<span class="kw">_</span>)) =&gt; <span class="bool-val">false</span>,
-            Expression::Constant(<span class="kw">_</span>, Constant::Int(<span class="kw">_</span>)) =&gt; <span class="bool-val">false</span>,
+            Expression::FactorE(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
         }
     }
 
     <span class="kw">pub fn </span>return_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ReturnType&gt; {
         <span class="kw">match </span><span class="self">self </span>{
-            Expression::Constant(<span class="kw">_</span>, Constant::Int(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Some</span>(ReturnType::Int),
-            Expression::Constant(<span class="kw">_</span>, Constant::Bool(<span class="kw">_</span>)) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
-            Expression::Reference(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            Expression::FactorE(<span class="kw">_</span>, Factor::Literal(Literal::Int(<span class="kw">_</span>))) =&gt; <span class="prelude-val">Some</span>(ReturnType::Int),
+            Expression::FactorE(<span class="kw">_</span>, Factor::Literal(Literal::Bool(<span class="kw">_</span>))) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
+            Expression::FactorE(<span class="kw">_</span>, Factor::Reference(<span class="kw">_</span>)) =&gt; <span class="prelude-val">None</span>,
             Expression::Sum(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Int),
             Expression::Min(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Int),
             Expression::Max(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Int),
@@ -721,8 +722,7 @@
             Expression::Ineq(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
             Expression::AllDiff(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
             Expression::Bubble(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>, <span class="comment">// TODO: (flm8) should this be a bool?
-            </span>Expression::Nothing =&gt; <span class="prelude-val">None</span>,
-            Expression::WatchedLiteral(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
+            </span>Expression::WatchedLiteral(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
             Expression::Reify(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(ReturnType::Bool),
         }
     }
@@ -736,6 +736,14 @@
         <span class="kw">let </span><span class="kw-2">mut </span>metadata = <span class="self">self</span>.get_meta();
         metadata.clean = bool_value;
         <span class="self">self</span>.set_meta(metadata);
+    }
+
+    <span class="kw">pub fn </span>as_factor(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Factor&gt; {
+        <span class="kw">if let </span>Expression::FactorE(_m, f) = <span class="self">self </span>{
+            <span class="prelude-val">Some</span>(f.clone())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 }
 
@@ -760,29 +768,33 @@
 
 <span class="kw">impl </span>From&lt;i32&gt; <span class="kw">for </span>Expression {
     <span class="kw">fn </span>from(i: i32) -&gt; <span class="self">Self </span>{
-        Expression::Constant(Metadata::new(), Constant::Int(i))
+        Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Int(i)))
     }
 }
 
 <span class="kw">impl </span>From&lt;bool&gt; <span class="kw">for </span>Expression {
     <span class="kw">fn </span>from(b: bool) -&gt; <span class="self">Self </span>{
-        Expression::Constant(Metadata::new(), Constant::Bool(b))
+        Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Bool(b)))
     }
 }
 
+<span class="kw">impl </span>From&lt;Factor&gt; <span class="kw">for </span>Expression {
+    <span class="kw">fn </span>from(value: Factor) -&gt; <span class="self">Self </span>{
+        Expression::FactorE(Metadata::new(), value)
+    }
+}
 <span class="kw">impl </span>Display <span class="kw">for </span>Expression {
     <span class="comment">// TODO: (flm8) this will change once we implement a parser (two-way conversion)
     </span><span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self </span>{
-            Expression::Constant(<span class="kw">_</span>, c) =&gt; <span class="kw">match </span>c {
-                Constant::Bool(b) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, b),
-                Constant::Int(i) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, i),
+            Expression::FactorE(<span class="kw">_</span>, Factor::Literal(c)) =&gt; <span class="kw">match </span>c {
+                Literal::Bool(b) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, b),
+                Literal::Int(i) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, i),
             },
-            Expression::Reference(<span class="kw">_</span>, name) =&gt; <span class="kw">match </span>name {
+            Expression::FactorE(<span class="kw">_</span>, Factor::Reference(name)) =&gt; <span class="kw">match </span>name {
                 Name::MachineName(n) =&gt; <span class="macro">write!</span>(f, <span class="string">"_{}"</span>, n),
                 Name::UserName(s) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, s),
             },
-            Expression::Nothing =&gt; <span class="macro">write!</span>(f, <span class="string">"Nothing"</span>),
             Expression::Sum(<span class="kw">_</span>, expressions) =&gt; {
                 <span class="macro">write!</span>(f, <span class="string">"Sum({})"</span>, display_expressions(expressions))
             }
@@ -875,8 +887,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_constant_sum() {
-        <span class="kw">let </span>c1 = Expression::Constant(Metadata::new(), Constant::Int(<span class="number">1</span>));
-        <span class="kw">let </span>c2 = Expression::Constant(Metadata::new(), Constant::Int(<span class="number">2</span>));
+        <span class="kw">let </span>c1 = Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Int(<span class="number">1</span>)));
+        <span class="kw">let </span>c2 = Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Int(<span class="number">2</span>)));
         <span class="kw">let </span>sum = Expression::Sum(Metadata::new(), <span class="macro">vec!</span>[c1.clone(), c2.clone()]);
         <span class="macro">assert_eq!</span>(
             sum.domain_of(<span class="kw-2">&amp;</span>SymbolTable::new()),
@@ -886,8 +898,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_constant_invalid_type() {
-        <span class="kw">let </span>c1 = Expression::Constant(Metadata::new(), Constant::Int(<span class="number">1</span>));
-        <span class="kw">let </span>c2 = Expression::Constant(Metadata::new(), Constant::Bool(<span class="bool-val">true</span>));
+        <span class="kw">let </span>c1 = Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Int(<span class="number">1</span>)));
+        <span class="kw">let </span>c2 = Expression::FactorE(Metadata::new(), Factor::Literal(Literal::Bool(<span class="bool-val">true</span>)));
         <span class="kw">let </span>sum = Expression::Sum(Metadata::new(), <span class="macro">vec!</span>[c1.clone(), c2.clone()]);
         <span class="macro">assert_eq!</span>(sum.domain_of(<span class="kw-2">&amp;</span>SymbolTable::new()), <span class="prelude-val">None</span>);
     }
@@ -900,7 +912,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_reference() {
-        <span class="kw">let </span>reference = Expression::Reference(Metadata::new(), Name::MachineName(<span class="number">0</span>));
+        <span class="kw">let </span>reference =
+            Expression::FactorE(Metadata::new(), Factor::Reference(Name::MachineName(<span class="number">0</span>)));
         <span class="kw">let </span><span class="kw-2">mut </span>vars = SymbolTable::new();
         vars.insert(
             Name::MachineName(<span class="number">0</span>),
@@ -914,13 +927,15 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_reference_not_found() {
-        <span class="kw">let </span>reference = Expression::Reference(Metadata::new(), Name::MachineName(<span class="number">0</span>));
+        <span class="kw">let </span>reference =
+            Expression::FactorE(Metadata::new(), Factor::Reference(Name::MachineName(<span class="number">0</span>)));
         <span class="macro">assert_eq!</span>(reference.domain_of(<span class="kw-2">&amp;</span>SymbolTable::new()), <span class="prelude-val">None</span>);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_reference_sum_single() {
-        <span class="kw">let </span>reference = Expression::Reference(Metadata::new(), Name::MachineName(<span class="number">0</span>));
+        <span class="kw">let </span>reference =
+            Expression::FactorE(Metadata::new(), Factor::Reference(Name::MachineName(<span class="number">0</span>)));
         <span class="kw">let </span><span class="kw-2">mut </span>vars = SymbolTable::new();
         vars.insert(
             Name::MachineName(<span class="number">0</span>),
@@ -935,7 +950,8 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_domain_of_reference_sum_bounded() {
-        <span class="kw">let </span>reference = Expression::Reference(Metadata::new(), Name::MachineName(<span class="number">0</span>));
+        <span class="kw">let </span>reference =
+            Expression::FactorE(Metadata::new(), Factor::Reference(Name::MachineName(<span class="number">0</span>)));
         <span class="kw">let </span><span class="kw-2">mut </span>vars = SymbolTable::new();
         vars.insert(
             Name::MachineName(<span class="number">0</span>),
