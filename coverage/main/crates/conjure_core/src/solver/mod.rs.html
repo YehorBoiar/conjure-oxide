@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-danger">
-                <abbr title="103 / 147">70.07 %</abbr></p>
+                <abbr title="103 / 146">70.55 %</abbr></p>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
         <div>
             <p class="heading">Functions</p>
             <p class="title has-text-danger">
-                <abbr title="15 / 75">20 %</abbr></p>
+                <abbr title="15 / 57">26.32 %</abbr></p>
         </div>
     </div>
 
@@ -1772,7 +1772,7 @@
             </div>
             <div class="column has-background-white p-0"
                  role="cell">
-                <pre class="has-background-white py-0 px-2">use crate::ast::{Constant, Name};</pre>
+                <pre class="has-background-white py-0 px-2">use crate::ast::{Literal, Name};</pre>
             </div>
         </div><div class="columns p-0 m-0" role="row">
             <div
@@ -1868,7 +1868,7 @@
             </div>
             <div class="column has-background-white p-0"
                  role="cell">
-                <pre class="has-background-white py-0 px-2">use self::states::*;</pre>
+                <pre class="has-background-white py-0 px-2">use self::states::{ExecutionSuccess, Init, ModelLoaded, SolverState};</pre>
             </div>
         </div><div class="columns p-0 m-0" role="row">
             <div
@@ -2086,13 +2086,13 @@
                 <a href="#129">129</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger"
-                role="cell" aria-label="0">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white"
+                role="cell" aria-label="no coverage">
                 
             </div>
-            <div class="column has-background-danger-light p-0"
+            <div class="column has-background-white p-0"
                  role="cell">
-                <pre class="has-background-danger-light py-0 px-2">    Display,</pre>
+                <pre class="has-background-white py-0 px-2">    Display,</pre>
             </div>
         </div><div class="columns p-0 m-0" role="row">
             <div
@@ -2380,7 +2380,7 @@
             </div>
             <div class="column has-background-white p-0"
                  role="cell">
-                <pre class="has-background-white py-0 px-2">pub type SolverCallback = Box&lt;dyn Fn(HashMap&lt;Name, Constant&gt;) -&gt; bool + Send&gt;;</pre>
+                <pre class="has-background-white py-0 px-2">pub type SolverCallback = Box&lt;dyn Fn(HashMap&lt;Name, Literal&gt;) -&gt; bool + Send&gt;;</pre>
             </div>
         </div><div class="columns p-0 m-0" role="row">
             <div
@@ -2412,7 +2412,7 @@
             </div>
             <div class="column has-background-white p-0"
                  role="cell">
-                <pre class="has-background-white py-0 px-2">    Box&lt;dyn Fn(HashMap&lt;Name, Constant&gt;, Box&lt;dyn ModelModifier&gt;) -&gt; bool + Send&gt;;</pre>
+                <pre class="has-background-white py-0 px-2">    Box&lt;dyn Fn(HashMap&lt;Name, Literal&gt;, Box&lt;dyn ModelModifier&gt;) -&gt; bool + Send&gt;;</pre>
             </div>
         </div><div class="columns p-0 m-0" role="row">
             <div
@@ -7042,7 +7042,7 @@
 </div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2024-11-07 19:17</p>
+                <p class="heading">Date: 2024-11-11 16:25</p>
             </div>
         </footer>
     </body>
