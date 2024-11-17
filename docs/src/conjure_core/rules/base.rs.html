@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/rules/base.rs`."><title>base.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0-nightly (90ab8eaed 2024-11-14)" data-channel="nightly" data-search-js="search-6851d9ab.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/rules/</div>base.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/rules/base.rs`."><title>base.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0-nightly (f2a35426b 2024-11-16)" data-channel="nightly" data-search-js="search-b6b1fcd2.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/rules/</div>base.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -542,9 +542,16 @@
 <a href="#541" id="541">541</a>
 <a href="#542" id="542">542</a>
 <a href="#543" id="543">543</a>
-<a href="#544" id="544">544</a></pre></div><pre class="rust"><code><span class="kw">use </span>conjure_core::ast::{
-    DecisionVariable, Expression <span class="kw">as </span>Expr, Factor, Literal <span class="kw">as </span>Lit, SymbolTable,
-};
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a></pre></div><pre class="rust"><code><span class="kw">use </span>conjure_core::ast::{Atom, DecisionVariable, Expression <span class="kw">as </span>Expr, Literal <span class="kw">as </span>Lit, SymbolTable};
 <span class="kw">use </span>conjure_core::metadata::Metadata;
 <span class="kw">use </span>conjure_core::rule_engine::{
     register_rule, register_rule_set, ApplicationError, ApplicationError::RuleNotApplicable,
@@ -553,8 +560,8 @@
 <span class="kw">use </span>conjure_core::Model;
 <span class="kw">use </span>uniplate::Uniplate;
 
+<span class="kw">use </span>Atom::<span class="kw-2">*</span>;
 <span class="kw">use </span>Expr::<span class="kw-2">*</span>;
-<span class="kw">use </span>Factor::<span class="kw-2">*</span>;
 <span class="kw">use </span>Lit::<span class="kw-2">*</span>;
 
 <span class="comment">/*****************************************************************************/
@@ -578,7 +585,10 @@
     <span class="comment">// excluded expressions
     </span><span class="kw">if </span><span class="macro">matches!</span>(
         expr,
-        FactorE(<span class="kw">_</span>, Reference(<span class="kw">_</span>,)) | FactorE(<span class="kw">_</span>, Literal(<span class="kw">_</span>)) | WatchedLiteral(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)
+        Atomic(<span class="kw">_</span>, <span class="kw">_</span>)
+            | WatchedLiteral(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)
+            | DivEqUndefZero(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)
+            | ModuloEqUndefZero(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)
     ) {
         <span class="kw">return </span><span class="prelude-val">Err</span>(ApplicationError::RuleNotApplicable);
     }
@@ -588,7 +598,7 @@
     }
 
     <span class="kw">let </span>new_expr = <span class="kw">match </span>expr {
-        Or(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; FactorE(Metadata::new(), Literal(Bool(<span class="bool-val">false</span>))),
+        Or(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; Atomic(Metadata::new(), Literal(Bool(<span class="bool-val">false</span>))),
         <span class="kw">_ </span>=&gt; And(Metadata::new(), <span class="macro">vec!</span>[]), <span class="comment">// TODO: (yb33) Change it to a simple vector after we refactor our model,
     </span>};
 
@@ -777,10 +787,10 @@
             <span class="kw">let </span><span class="kw-2">mut </span>changed = <span class="bool-val">false</span>;
             <span class="kw">for </span>e <span class="kw">in </span>exprs {
                 <span class="kw">match </span>e {
-                    FactorE(metadata, Literal(Bool(val))) =&gt; {
+                    Atomic(metadata, Literal(Bool(val))) =&gt; {
                         <span class="kw">if </span><span class="kw-2">*</span>val {
                             <span class="comment">// If we find a true, the whole expression is true
-                            </span><span class="kw">return </span><span class="prelude-val">Ok</span>(Reduction::pure(FactorE(
+                            </span><span class="kw">return </span><span class="prelude-val">Ok</span>(Reduction::pure(Atomic(
                                 metadata.clone_dirty(),
                                 Literal(Bool(<span class="bool-val">true</span>)),
                             )));
@@ -816,10 +826,10 @@
             <span class="kw">let </span><span class="kw-2">mut </span>changed = <span class="bool-val">false</span>;
             <span class="kw">for </span>e <span class="kw">in </span>exprs {
                 <span class="kw">match </span>e {
-                    FactorE(metadata, Literal(Bool(val))) =&gt; {
+                    Atomic(metadata, Literal(Bool(val))) =&gt; {
                         <span class="kw">if </span>!<span class="kw-2">*</span>val {
                             <span class="comment">// If we find a false, the whole expression is false
-                            </span><span class="kw">return </span><span class="prelude-val">Ok</span>(Reduction::pure(FactorE(
+                            </span><span class="kw">return </span><span class="prelude-val">Ok</span>(Reduction::pure(Atomic(
                                 metadata.clone_dirty(),
                                 Literal(Bool(<span class="bool-val">false</span>)),
                             )));
@@ -851,7 +861,7 @@
 </span><span class="kw">fn </span>evaluate_constant_not(expr: <span class="kw-2">&amp;</span>Expr, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Model) -&gt; ApplicationResult {
     <span class="kw">match </span>expr {
         Not(<span class="kw">_</span>, contents) =&gt; <span class="kw">match </span>contents.as_ref() {
-            FactorE(metadata, Literal(Bool(val))) =&gt; <span class="prelude-val">Ok</span>(Reduction::pure(FactorE(
+            Atomic(metadata, Literal(Bool(val))) =&gt; <span class="prelude-val">Ok</span>(Reduction::pure(Atomic(
                 metadata.clone_dirty(),
                 Literal(Bool(!val)),
             ))),
@@ -878,12 +888,12 @@
             </span><span class="kw">for </span>e <span class="kw">in </span>exprs {
                 new_top.push(Leq(
                     Metadata::new(),
-                    Box::new(FactorE(Metadata::new(), Reference(new_name.clone()))),
+                    Box::new(Atomic(Metadata::new(), Reference(new_name.clone()))),
                     Box::new(e.clone()),
                 ));
                 disjunction.push(Eq(
                     Metadata::new(),
-                    Box::new(FactorE(Metadata::new(), Reference(new_name.clone()))),
+                    Box::new(Atomic(Metadata::new(), Reference(new_name.clone()))),
                     Box::new(e.clone()),
                 ));
             }
@@ -896,7 +906,7 @@
             new_vars.insert(new_name.clone(), DecisionVariable::new(domain));
 
             <span class="prelude-val">Ok</span>(Reduction::new(
-                FactorE(Metadata::new(), Reference(new_name)),
+                Atomic(Metadata::new(), Reference(new_name)),
                 And(metadata.clone_dirty(), new_top),
                 new_vars,
             ))
@@ -922,12 +932,12 @@
             </span><span class="kw">for </span>e <span class="kw">in </span>exprs {
                 new_top.push(Geq(
                     Metadata::new(),
-                    Box::new(FactorE(Metadata::new(), Reference(new_name.clone()))),
+                    Box::new(Atomic(Metadata::new(), Reference(new_name.clone()))),
                     Box::new(e.clone()),
                 ));
                 disjunction.push(Eq(
                     Metadata::new(),
-                    Box::new(FactorE(Metadata::new(), Reference(new_name.clone()))),
+                    Box::new(Atomic(Metadata::new(), Reference(new_name.clone()))),
                     Box::new(e.clone()),
                 ));
             }
@@ -940,7 +950,7 @@
             new_vars.insert(new_name.clone(), DecisionVariable::new(domain));
 
             <span class="prelude-val">Ok</span>(Reduction::new(
-                FactorE(Metadata::new(), Reference(new_name)),
+                Atomic(Metadata::new(), Reference(new_name)),
                 And(metadata.clone_dirty(), new_top),
                 new_vars,
             ))
@@ -1008,6 +1018,14 @@
  */
 </span><span class="attr">#[register_rule((<span class="string">"Base"</span>, <span class="number">8400</span>))]
 </span><span class="kw">fn </span>distribute_not_over_and(expr: <span class="kw-2">&amp;</span>Expr, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Model) -&gt; ApplicationResult {
+    <span class="kw">for </span>child <span class="kw">in </span>expr.universe() {
+        <span class="kw">if </span><span class="macro">matches!</span>(
+            child,
+            Expr::UnsafeDiv(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) | Expr::Bubble(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) | Expr::UnsafeMod(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)
+        ) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(RuleNotApplicable);
+        }
+    }
     <span class="kw">match </span>expr {
         Not(<span class="kw">_</span>, contents) =&gt; <span class="kw">match </span>contents.as_ref() {
             And(metadata, exprs) =&gt; {
