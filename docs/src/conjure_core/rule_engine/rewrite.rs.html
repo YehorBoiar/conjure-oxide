@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/rule_engine/rewrite.rs`."><title>rewrite.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0-nightly (dff3e7ccd 2024-11-26)" data-channel="nightly" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/rule_engine/</div>rewrite.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/conjure_core/src/rule_engine/rewrite.rs`."><title>rewrite.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="conjure_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0-nightly (9c707a8b7 2024-12-07)" data-channel="nightly" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">conjure_core/rule_engine/</div>rewrite.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -449,12 +449,46 @@
 <a href="#448" id="448">448</a>
 <a href="#449" id="449">449</a>
 <a href="#450" id="450">450</a>
-<a href="#451" id="451">451</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::env;
 <span class="kw">use </span>std::fmt::Display;
 
 <span class="kw">use </span>thiserror::Error;
 
+<span class="kw">use </span><span class="kw">crate</span>::ast::ReturnType;
 <span class="kw">use </span><span class="kw">crate</span>::bug;
 <span class="kw">use </span><span class="kw">crate</span>::stats::RewriterStats;
 <span class="kw">use </span>tracing::trace;
@@ -586,18 +620,40 @@
     <span class="kw">let </span>start = std::time::Instant::now();
 
     <span class="comment">//the while loop is exited when None is returned implying the sub-expression is clean
-    </span><span class="kw">while let </span><span class="prelude-val">Some</span>(step) = rewrite_iteration(
-        <span class="kw-2">&amp;</span>new_model.constraints,
-        <span class="kw-2">&amp;</span>new_model,
-        <span class="kw-2">&amp;</span>rules,
-        apply_optimizations,
-        <span class="kw-2">&amp;mut </span>stats,
-    ) {
-        step.apply(<span class="kw-2">&amp;mut </span>new_model); <span class="comment">// Apply side-effects (e.g. symbol table updates)
-    </span>}
+    </span><span class="kw">let </span><span class="kw-2">mut </span>i: usize = <span class="number">0</span>;
+    <span class="kw">while </span>i &lt; new_model.constraints.len() {
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(step) = rewrite_iteration(
+            <span class="kw-2">&amp;</span>new_model.constraints[i],
+            <span class="kw-2">&amp;</span>new_model,
+            <span class="kw-2">&amp;</span>rules,
+            apply_optimizations,
+            <span class="kw-2">&amp;mut </span>stats,
+        ) {
+            <span class="macro">debug_assert!</span>(is_vec_bool(<span class="kw-2">&amp;</span>step.new_top)); <span class="comment">// All new_top expressions should be boolean
+            </span>new_model.constraints[i] = step.new_expression.clone();
+            step.apply(<span class="kw-2">&amp;mut </span>new_model); <span class="comment">// Apply side-effects (e.g., symbol table updates)
+        </span>}
+
+        <span class="comment">// If new constraints are added, continue processing them in the next iterations.
+        </span>i += <span class="number">1</span>;
+    }
+
     stats.rewriter_run_time = <span class="prelude-val">Some</span>(start.elapsed());
     model.context.write().unwrap().stats.add_rewriter_run(stats);
     <span class="prelude-val">Ok</span>(new_model)
+}
+
+<span class="doccomment">/// Checks if all expressions in `Vec&lt;Expr&gt;` are booleans. This needs to be true so
+/// the vector could be conjuncted to the model.
+/// # Returns
+///
+/// - true: all expressions are booleans (so can be conjuncted).
+///
+/// - false: not all expressions are booleans.
+</span><span class="kw">fn </span>is_vec_bool(exprs: <span class="kw-2">&amp;</span>Vec&lt;Expression&gt;) -&gt; bool {
+    exprs
+        .iter()
+        .all(|expr| expr.return_type() == <span class="prelude-val">Some</span>(ReturnType::Bool))
 }
 
 <span class="doccomment">/// Attempts to apply a set of rules to the given expression and its sub-expressions in the model.
@@ -822,8 +878,9 @@
     }
     <span class="kw">let </span>red = results[<span class="number">0</span>].reduction.clone();
     <span class="kw">let </span>rule = results[<span class="number">0</span>].rule;
+    <span class="kw">let </span>new_top_string = <span class="macro">format!</span>(<span class="string">"{:?}"</span>, red.new_top);
     <span class="macro">tracing::info!</span>(
-        new_top=%red.new_top,
+        %new_top_string,
         <span class="string">"Rule applicable: {} ({:?}), to expression: {}, resulting in: {}"</span>,
         rule.name,
         rule.rule_sets,
@@ -889,6 +946,15 @@
     <span class="kw">if </span>!results.is_empty() {
         <span class="kw">let </span>rule = results[<span class="number">0</span>].rule;
         <span class="kw">let </span>new_expression = results[<span class="number">0</span>].reduction.new_expression.clone();
+
+        <span class="macro">trace!</span>(
+            target: <span class="string">"rule_engine_human"</span>,
+            <span class="string">"{}, \n   ~~&gt; {} ({:?}) \n{} \n\n--\n"</span>,
+            expression,
+            rule.name,
+            rule.rule_sets,
+            new_expression,
+        );
 
         <span class="macro">trace!</span>(
             target: <span class="string">"rule_engine"</span>,
